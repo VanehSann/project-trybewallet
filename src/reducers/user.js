@@ -1,12 +1,14 @@
 // Esse reducer será responsável por tratar as informações da pessoa usuária
-const initialState = {};
+const initialState = {
+  email: '',
+};
 
 function user(state = initialState, action) {
   switch (action.type) {
   case ('actionUserType'):
     return {
       ...state,
-      email: action.stateEmail,
+      email: action.email,
     };
   default:
     return state;
