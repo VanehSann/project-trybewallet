@@ -3,12 +3,13 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Login from './pages/Login';
 import Wallet from './pages/Wallet';
 
+
 function App() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route path="/carteira" component={ Wallet } />
-        <Route exact path="/" component={ Login } />
+        <Route path="/" component={ Login } exact />
+        <Route path="/carteira" component={ Wallet } exact />
       </Switch>
     </BrowserRouter>
   );

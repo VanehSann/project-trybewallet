@@ -42,7 +42,10 @@ loginbutton = () => {
   const { history, userState } = this.props;
   const { email } = this.state;
   userState(email);
+
   history.push('/carteira');
+
+  console.log(history.location.pathname);
 }
 
 render() {
@@ -70,6 +73,7 @@ render() {
         onClick={ this.loginbutton }
       >
         Entrar
+
       </button>
     </fieldset>
   );

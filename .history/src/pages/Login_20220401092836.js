@@ -42,7 +42,11 @@ loginbutton = () => {
   const { history, userState } = this.props;
   const { email } = this.state;
   userState(email);
-  history.push('/carteira');
+  setTimeout(() => {
+    history.push('/carteira');
+  }, 1000);
+
+  console.log(history.location.pathname);
 }
 
 render() {

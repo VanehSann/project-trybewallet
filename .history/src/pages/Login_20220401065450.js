@@ -38,7 +38,8 @@ isValid = () => {
   });
 }
 
-loginbutton = () => {
+loginbutton = (target) => {
+  target.preventDefault();
   const { history, userState } = this.props;
   const { email } = this.state;
   userState(email);
@@ -70,6 +71,7 @@ render() {
         onClick={ this.loginbutton }
       >
         Entrar
+
       </button>
     </fieldset>
   );
