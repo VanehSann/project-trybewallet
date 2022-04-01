@@ -1,15 +1,13 @@
-import React from 'react';
 import { screen, within } from '@testing-library/react';
-import { response as mockData } from './mocks/mockData';
+import React from 'react';
 import Wallet from '../pages/Wallet';
-import { renderWithRouterAndStore } from './helpers/testConfig';
-
 import {
-  VALUE_INPUT_TEST_ID,
-  METHOD_INPUT_TEST_ID,
-  TAG_INPUT_TEST_ID,
-  DESCRIPTION_INPUT_TEST_ID
-} from './helpers/constants'; 
+  DESCRIPTION_INPUT_TEST_ID, METHOD_INPUT_TEST_ID,
+  TAG_INPUT_TEST_ID, VALUE_INPUT_TEST_ID
+} from './helpers/constants';
+import { renderWithRouterAndStore } from './helpers/testConfig';
+import { response as mockData } from './mocks/mockData';
+
 
 const apiResponse = Promise.resolve({
   json: () => Promise.resolve(mockData),
