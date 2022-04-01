@@ -1,21 +1,23 @@
-import React from 'react';
-import userEvent from '@testing-library/user-event';
 import { fireEvent, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import React from 'react';
 import App from '../App';
-
-import { renderWithRouterAndStore } from './helpers/testConfig';
-
 import {
   EMAIL_INPUT_TEST_ID,
-  PASSWORD_INPUT_TEST_ID,
-  VALID_EMAIL,
-  VALID_PASSWORD,
+
+
+
   INVALID_EMAIL_0,
   INVALID_EMAIL_1,
   INVALID_EMAIL_2,
   INVALID_EMAIL_3,
-  INVALID_PASSWORD,
+  INVALID_PASSWORD, PASSWORD_INPUT_TEST_ID,
+  VALID_EMAIL,
+  VALID_PASSWORD
 } from './helpers/constants';
+import { renderWithRouterAndStore } from './helpers/testConfig';
+
+
 
 afterEach(() => jest.clearAllMocks());
 
