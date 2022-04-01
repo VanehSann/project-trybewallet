@@ -8,7 +8,7 @@ function user(state = initialState, action) {
   case ('actionUserType'):
     return {
       ...state,
-      email: action.email,
+      email: action.state,
     };
   default:
     return state;

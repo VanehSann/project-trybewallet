@@ -1,8 +1,8 @@
 // Coloque aqui suas actions
 export const actionUserType = 'actionUserType';
-export const actionUser = (email) => ({
+export const actionUser = (state) => ({
   type: actionUserType,
-  email,
+  state,
 });
 
 export const actionWalletType = 'actionWalletType';
