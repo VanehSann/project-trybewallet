@@ -1,4 +1,5 @@
-import { combineReducers } from 'redux';
+import { combineReducers, createStore } from 'redux';
+import { composeWithDevTools } from 'redux-devtools-extension';
 import user from './user';
 import wallet from './wallet';
 
@@ -13,8 +14,5 @@ import wallet from './wallet';
 
 // ATENÇÃO: você obrigatoriamente tem que utilizar as chaves "user" e "wallet" no seu estado global
 
-// o npm start dizia que não estava exportando, exportei aqui, e pegou, mesmo eu exportando embaixo.
 export const rootReducer = combineReducers({ user, wallet });
-
-// mas se removo debaixo o lint reclama.
-export default rootReducer;
+export const store = createStore(rootReducer, composeWithDevTools());
