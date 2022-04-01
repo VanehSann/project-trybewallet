@@ -1,7 +1,8 @@
 // Esse reducer será responsável por tratar o todas as informações relacionadas as despesas
 
 const initialState = {
-  state: 0,
+  currencies: [],
+  expenses: [],
 };
 
 function wallet(state = initialState, action) {
