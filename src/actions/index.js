@@ -5,5 +5,17 @@ export const actionUser = (state) => ({
   state,
 });
 
-export const actionWalletType = 'actionWalletType';
-export const actionWallet = (state) => ({ type: actionWalletType, state });
+export const actionWalletTypeCurrencies = 'actionWalletTypeCurrencies';
+export const actionWalletCurrencies = (state) => ({
+  type: actionWalletTypeCurrencies,
+  state,
+});
+
+// testando
+export const actionWalletTypeExpenses = 'actionWalletTypeExpenses';
+export const actionWalletExpenses = (state) => ({
+  type: actionWalletTypeExpenses,
+  state,
+});
+// fim testando
+/// usando o thunk
