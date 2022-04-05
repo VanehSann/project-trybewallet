@@ -93,75 +93,92 @@ class Wallet extends React.Component {
     const methodArr = ['Dinheiro', 'Cartão de crédito', 'Cartão de débito'];
     const tags = ['Alimentação', 'Lazer', 'Trabalho', 'Transporte', 'Saúde'];
     return (
-      <header>
-        <div>
-          <div>TrybeWallet</div>
-          <p data-testid="email-field">{ emailProp }</p>
-          <span data-testid="total-field">{ despesas }</span>
-          <span data-testid="header-currency-field">BRL</span>
-        </div>
-        <div>
-          <input
-            type="number"
-            data-testid="value-input"
-            value={ valueInput }
-            onChange={ this.inputOnChange }
-            name="valueInput"
-          />
-          <input
-            type="text"
-            data-testid="description-input"
-            value={ descriptionInput }
-            onChange={ this.inputOnChange }
-            name="descriptionInput"
-          />
-          <label htmlFor="moeda" aria-label="moeda">
-            <select id="moeda" onChange={ this.inputOnChange } name="currencyInterate">
-              {
-                currencies.map((currency) => (
-                  <option
-                    key={ currency }
-                    value={ currency }
-                  >
-                    { currency }
-                  </option>
-                ))
-              }
-            </select>
-          </label>
-          <select
-            data-testid="method-input"
-            onChange={ this.inputOnChange }
-            name="methodInterate"
-          >
-            { methodArr.map((method) => (
-              <option
-                key={ method }
-                value={ `${method}` }
+      <>
+        <header>
+          <div>
+            <div>TrybeWallet</div>
+            <p data-testid="email-field">{ emailProp }</p>
+            <span data-testid="total-field">{ despesas }</span>
+            <span data-testid="header-currency-field">BRL</span>
+          </div>
+          <div>
+            <input
+              type="number"
+              data-testid="value-input"
+              value={ valueInput }
+              onChange={ this.inputOnChange }
+              name="valueInput"
+            />
+            <input
+              type="text"
+              data-testid="description-input"
+              value={ descriptionInput }
+              onChange={ this.inputOnChange }
+              name="descriptionInput"
+            />
+            <label htmlFor="moeda" aria-label="moeda">
+              <select id="moeda" onChange={ this.inputOnChange } name="currencyInterate">
+                {
+                  currencies.map((currency) => (
+                    <option
+                      key={ currency }
+                      value={ currency }
+                    >
+                      { currency }
+                    </option>
+                  ))
+                }
+              </select>
+            </label>
+            <select
+              data-testid="method-input"
+              onChange={ this.inputOnChange }
+              name="methodInterate"
+            >
+              { methodArr.map((method) => (
+                <option
+                  key={ method }
+                  value={ `${method}` }
 
-              >
-                { method }
-              </option>
-            )) }
-          </select>
-          <select
-            data-testid="tag-input"
-            onChange={ this.inputOnChange }
-            name="tagInterate"
-          >
-            {tags.map((tag) => (
-              <option
-                key={ tag }
-                value={ `${tag}` }
-              >
-                { tag }
-              </option>
-            )) }
-          </select>
-          <button type="button" onClick={ this.addbutton }> Adicionar despesa</button>
-        </div>
-      </header>
-    );
+                >
+                  { method }
+                </option>
+              )) }
+            </select>
+            <select
+              data-testid="tag-input"
+              onChange={ this.inputOnChange }
+              name="tagInterate"
+            >
+              {tags.map((tag) => (
+                <option
+                  key={ tag }
+                  value={ `${tag}` }
+                >
+                  { tag }
+                </option>
+              )) }
+            </select>
+            <button type="button" onClick={ this.addbutton }> Adicionar despesa</button>
+          </div>
+        </header>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Descrição</th>
+              <th>Tag</th>
+              <th>Método de pagamento</th>
+              <th>Valor</th>
+              <th>Moeda</th>
+              <th>Câmbio utilizado</th>
+              <th>Valor convertido</th>
+              <th>Moeda de conversão</th>
+              <th>Editar/Excluir</th>
+            </tr>
+          </thead>
+        </table>
+      </>);
   }
 }
 
