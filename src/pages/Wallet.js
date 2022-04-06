@@ -88,7 +88,7 @@ class Wallet extends React.Component {
   }
 
   render() {
-    const { emailProp } = this.props;
+    const { emailProp, expensesProp } = this.props;
     const { currencies, valueInput, despesas, descriptionInput } = this.state;
     const methodArr = ['Dinheiro', 'Cartão de crédito', 'Cartão de débito'];
     const tags = ['Alimentação', 'Lazer', 'Trabalho', 'Transporte', 'Saúde'];
@@ -139,7 +139,6 @@ class Wallet extends React.Component {
                 <option
                   key={ method }
                   value={ `${method}` }
-
                 >
                   { method }
                 </option>
@@ -177,6 +176,31 @@ class Wallet extends React.Component {
               <th>Editar/Excluir</th>
             </tr>
           </thead>
+          <tbody>
+            {expensesProp.map((expense, index) => (
+              <tr key={ index }>
+                <td>{expense.description}</td>
+                <td>{expense.tag}</td>
+                <td>{expense.method}</td>
+                <td>{`${expense.value}.00`}</td>
+                <td>{expense.exchangeRates[expense.currency].name}</td>
+                <td>
+                  {parseFloat(expense.exchangeRates[expense.currency].ask)
+                    .toFixed(2)}
+                </td>
+                <td>
+                  {Math.floor(expense.exchangeRates[expense.currency].ask
+                   * expense.value * 100) / 100 }
+                </td>
+                <td>Real</td>
+                <td>
+                  <button type="button">Editar</button>
+                  <button type="button">Excluir</button>
+                </td>
+
+              </tr>
+            ))}
+          </tbody>
         </table>
       </>);
   }
@@ -184,11 +208,13 @@ class Wallet extends React.Component {
 
 Wallet.propTypes = {
   emailProp: PropTypes.string.isRequired,
+  expensesProp: PropTypes.shape(PropTypes.string).isRequired,
   walletDispatchCurrencies: PropTypes.func.isRequired,
   walletDispatchExpenses: PropTypes.func.isRequired,
 };
 const mapStateToProps = (state) => ({
   emailProp: state.user.email,
+  expensesProp: state.wallet.expenses,
 
 });
 
