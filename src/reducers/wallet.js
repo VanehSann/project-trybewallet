@@ -3,6 +3,7 @@
 const initialState = {
   currencies: [],
   expenses: [],
+  despesas: 0,
 };
 
 function wallet(state = initialState, action) {
@@ -11,7 +12,6 @@ function wallet(state = initialState, action) {
     return {
       ...state,
       currencies: action.state.currencies,
-      // expenses: [...state.expenses, action.state.expenses],
     };
     // teste
   case ('actionWalletTypeExpenses'):
@@ -20,6 +20,11 @@ function wallet(state = initialState, action) {
       expenses: [...state.expenses, action.state.expenses],
     };
     // fim teste
+  case ('actionWalletTypeDespesas'):
+    return {
+      ...state,
+      despesas: action.state.despesas,
+    };
   default:
     return state;
   }

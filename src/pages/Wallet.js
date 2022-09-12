@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-import { actionWalletCurrencies, actionWalletExpenses } from '../actions/index';
+import { actionWalletCurrencies, actionWalletDespesas, actionWalletExpenses } from '../actions/index';
 
 const alimentacao = 'Alimentação'; // por conta do lint
 class Wallet extends React.Component {
@@ -19,10 +19,9 @@ class Wallet extends React.Component {
       expenses: [],
       //
       despesas: 0,
+      //
+      editExpense: false,
     };
-
-    this.addbutton = this.addbutton.bind(this);
-    this.inputOnChange = this.inputOnChange.bind(this);
   }
 
   inputOnChange = ({ target }) => {
@@ -33,22 +32,22 @@ class Wallet extends React.Component {
   }
 
   componentDidMount = async () => {
-    const { walletDispatchCurrencies } = this.props;
+    const { walletDispatchCurrencies, walletDispatchDespesas } = this.props;
     const resultFetch = await fetch('https://economia.awesomeapi.com.br/json/all');
     const result = await resultFetch.json();
     const resultObject = Object.keys(result);
     resultObject.splice(1, 1);
     this.setState({
       currencies: resultObject,
+      despesas: 187.12,
     });
-    // const { currencies } = this.state;
     walletDispatchCurrencies(this.state);
-    // console.log(this.state);
+    walletDispatchDespesas(this.state);
   };
 
-  addbutton = async () => {
+  addExpense = async () => {
     // não consegui implementar o thunk
-    const { walletDispatchExpenses } = this.props;
+    const { walletDispatchExpenses, walletDispatchDespesas } = this.props;
     const { idInterate, valueInput, descriptionInput, currencyInterate,
       methodInterate, tagInterate, despesas } = this.state;
     const resultFetch = await fetch('https://economia.awesomeapi.com.br/json/all');
@@ -85,141 +84,210 @@ class Wallet extends React.Component {
     });
 
     walletDispatchExpenses(this.state);
+    walletDispatchDespesas(this.state);
   }
 
-  render() {
-    const { emailProp, expensesProp } = this.props;
-    const { currencies, valueInput, despesas, descriptionInput } = this.state;
-    const methodArr = ['Dinheiro', 'Cartão de crédito', 'Cartão de débito'];
-    const tags = ['Alimentação', 'Lazer', 'Trabalho', 'Transporte', 'Saúde'];
-    return (
-      <>
-        <header>
-          <div>
-            <div>TrybeWallet</div>
-            <p data-testid="email-field">{ emailProp }</p>
-            <span data-testid="total-field">{ despesas }</span>
-            <span data-testid="header-currency-field">BRL</span>
-          </div>
-          <div>
-            <input
-              type="number"
-              data-testid="value-input"
-              value={ valueInput }
-              onChange={ this.inputOnChange }
-              name="valueInput"
-            />
-            <input
-              type="text"
-              data-testid="description-input"
-              value={ descriptionInput }
-              onChange={ this.inputOnChange }
-              name="descriptionInput"
-            />
-            <label htmlFor="moeda" aria-label="moeda">
-              <select id="moeda" onChange={ this.inputOnChange } name="currencyInterate">
-                {
-                  currencies.map((currency) => (
-                    <option
-                      key={ currency }
-                      value={ currency }
-                    >
-                      { currency }
-                    </option>
-                  ))
-                }
-              </select>
-            </label>
-            <select
-              data-testid="method-input"
-              onChange={ this.inputOnChange }
-              name="methodInterate"
-            >
-              { methodArr.map((method) => (
-                <option
-                  key={ method }
-                  value={ `${method}` }
-                >
-                  { method }
-                </option>
-              )) }
-            </select>
-            <select
-              data-testid="tag-input"
-              onChange={ this.inputOnChange }
-              name="tagInterate"
-            >
-              {tags.map((tag) => (
-                <option
-                  key={ tag }
-                  value={ `${tag}` }
-                >
-                  { tag }
-                </option>
-              )) }
-            </select>
-            <button type="button" onClick={ this.addbutton }> Adicionar despesa</button>
-          </div>
-        </header>
+  editExpense = () => {
+    this.setState({
+      editExpense: false,
+    });
+    console.log('a');
+  }
 
-        <table>
-          <thead>
-            <tr>
-              <th>Descrição</th>
-              <th>Tag</th>
-              <th>Método de pagamento</th>
-              <th>Valor</th>
-              <th>Moeda</th>
-              <th>Câmbio utilizado</th>
-              <th>Valor convertido</th>
-              <th>Moeda de conversão</th>
-              <th>Editar/Excluir</th>
-            </tr>
-          </thead>
-          <tbody>
-            {expensesProp.map((expense, index) => (
-              <tr key={ index }>
-                <td>{expense.description}</td>
-                <td>{expense.tag}</td>
-                <td>{expense.method}</td>
-                <td>{`${expense.value}.00`}</td>
-                <td>{expense.exchangeRates[expense.currency].name}</td>
-                <td>
-                  {parseFloat(expense.exchangeRates[expense.currency].ask)
-                    .toFixed(2)}
-                </td>
-                <td>
-                  {Math.floor(expense.exchangeRates[expense.currency].ask
+deleteBtn = (index, valor) => {
+  const { despesas } = this.state;
+
+  const { expensesProp, walletDispatchDespesas } = this.props;
+  const subtracaoDespesas = (despesas - valor);
+  //
+  expensesProp.map((expense) => ((expense.id === index)
+   && expensesProp.splice(expense, 1)));
+  //
+
+  //
+  this.setState({
+    despesas: subtracaoDespesas < 0 ? 0 : subtracaoDespesas, // (subtracaoDespesas < 0) ? 0 : subtracaoDespesas,
+  });
+  //
+  console.log('ExpensesDelete');
+  walletDispatchDespesas(this.state);
+}
+
+editBtn = () => {
+  this.setState({
+    editExpense: true,
+  });
+  console.log('depois eu faço2');
+}
+
+render() {
+  const { emailProp, expensesProp, despesasProp } = this.props;
+  const { currencies, valueInput, descriptionInput, editExpense, despesas } = this.state;
+  console.log('Despesas: ', despesas);
+  const methodArr = ['Dinheiro', 'Cartão de crédito', 'Cartão de débito'];
+  const tags = ['Alimentação', 'Lazer', 'Trabalho', 'Transporte', 'Saúde'];
+  return (
+    <>
+      <header>
+        <div>
+          <div>TrybeWallet</div>
+          <p data-testid="email-field">{ emailProp }</p>
+          <span data-testid="total-field">{ despesas }</span>
+          <span data-testid="header-currency-field">BRL</span>
+        </div>
+        <div>
+          <input
+            type="number"
+            data-testid="value-input"
+            value={ valueInput }
+            onChange={ this.inputOnChange }
+            name="valueInput"
+          />
+          <input
+            type="text"
+            data-testid="description-input"
+            value={ descriptionInput }
+            onChange={ this.inputOnChange }
+            name="descriptionInput"
+          />
+          <label
+            htmlFor="moeda"
+            aria-label="moeda"
+            data-testid="currency-input"
+          >
+            <select id="moeda" onChange={ this.inputOnChange } name="currencyInterate">
+              {
+                currencies.map((currency) => (
+                  <option
+                    key={ currency }
+                    value={ currency }
+                  >
+                    { currency }
+                  </option>
+                ))
+              }
+            </select>
+          </label>
+          <select
+            data-testid="method-input"
+            onChange={ this.inputOnChange }
+            name="methodInterate"
+          >
+            { methodArr.map((method) => (
+              <option
+                key={ method }
+                value={ `${method}` }
+              >
+                { method }
+              </option>
+            )) }
+          </select>
+          <select
+            data-testid="tag-input"
+            onChange={ this.inputOnChange }
+            name="tagInterate"
+          >
+            {tags.map((tag) => (
+              <option
+                key={ tag }
+                value={ `${tag}` }
+              >
+                { tag }
+              </option>
+            )) }
+          </select>
+          { !editExpense
+            ? (
+              <button type="button" onClick={ this.addExpense }>
+                Adicionar despesa
+              </button>
+            )
+            : (
+              <button type="button" onClick={ this.editExpense }>
+                Editar despesa
+              </button>
+            )}
+        </div>
+      </header>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Descrição</th>
+            <th>Tag</th>
+            <th>Método de pagamento</th>
+            <th>Valor</th>
+            <th>Moeda</th>
+            <th>Câmbio utilizado</th>
+            <th>Valor convertido</th>
+            <th>Moeda de conversão</th>
+            <th>Editar/Excluir</th>
+          </tr>
+        </thead>
+        <tbody>
+          {expensesProp.map((expense) => (
+            <tr key={ expense.id }>
+              <td>{expense.description}</td>
+              <td>{expense.tag}</td>
+              <td>{expense.method}</td>
+              <td>{`${expense.value}.00`}</td>
+              <td>{expense.exchangeRates[expense.currency].name}</td>
+              <td>
+                {parseFloat(expense.exchangeRates[expense.currency].ask)
+                  .toFixed(2)}
+              </td>
+              <td>
+                {Math.floor(expense.exchangeRates[expense.currency].ask
                    * expense.value * 100) / 100 }
-                </td>
-                <td>Real</td>
-                <td>
-                  <button type="button">Editar</button>
-                  <button type="button">Excluir</button>
-                </td>
+              </td>
+              <td>Real</td>
+              <td>
+                <button
+                  type="button"
+                  data-testid="edit-btn"
+                  onClick={ () => this.editBtn() }
 
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </>);
-  }
+                >
+                  Editar
+                </button>
+                <button
+                  type="submit"
+                  data-testid="delete-btn"
+                  onClick={ () => this.deleteBtn(expense.id, Math.floor(expense.exchangeRates[expense.currency].ask
+                    * expense.value * 100) / 100) }
+                  // Debóra Serra me deu dica de enviar o id no lugar do index, e eu acabei usando essa dica pra enviar outras informações, com o (ask * value).
+                >
+                  Excluir
+                </button>
+              </td>
+
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>);
+}
 }
 
 Wallet.propTypes = {
   emailProp: PropTypes.string.isRequired,
-  expensesProp: PropTypes.shape(PropTypes.string).isRequired,
   walletDispatchCurrencies: PropTypes.func.isRequired,
   walletDispatchExpenses: PropTypes.func.isRequired,
+  walletDispatchDespesas: PropTypes.func.isRequired,
+  expensesProp: PropTypes.arrayOf().isRequired,
+  despesasProp: PropTypes.number.isRequired,
 };
 const mapStateToProps = (state) => ({
   emailProp: state.user.email,
   expensesProp: state.wallet.expenses,
+  // despesasProp: state.wallet.despesas,
 
 });
 
 const mapDispatchToProps = (dispatch) => ({
   walletDispatchCurrencies: (state) => dispatch(actionWalletCurrencies(state)),
   walletDispatchExpenses: (state) => dispatch(actionWalletExpenses(state)),
+  walletDispatchDespesas: (state) => dispatch(actionWalletDespesas(state)),
+
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Wallet);

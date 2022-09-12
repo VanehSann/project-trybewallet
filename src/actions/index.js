@@ -18,4 +18,8 @@ export const actionWalletExpenses = (state) => ({
   state,
 });
 // fim testando
-/// usando o thunk
+export const actionWalletTypeDespesas = 'actionWalletTypeDespesas';
+export const actionWalletDespesas = (state) => ({
+  type: actionWalletTypeDespesas,
+  state,
+});
